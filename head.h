@@ -20,6 +20,7 @@ typedef struct record_node_tag
 
 
 void insert_lists(record_node **listt1, record_node **listt2);
+void delete_lists(record_node **listt1, record_node **listt2);
 void insert_stu_rec(record_node **sptr);
 record_node* create_node(int rn, char* stu_name, char* sub_code, int marks);
 record_node* insert_node(record_node* sptr, int rn, char* stu_name, char* sub_code, int marks);

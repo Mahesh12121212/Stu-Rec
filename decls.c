@@ -3,7 +3,7 @@
 /*------------------------------------------------DECLARATIONS OF FUNCTIONS-------------------------------------------------------------*/
 
 		
-/*------------------------------------------------------GETLISTS FUNCTION----------------------------------------------------------------*/
+/*------------------------------------------------------INSERTLISTS FUNCTION------------------------------------------------------------*/
 
 void insert_lists(record_node **listt1, record_node **listt2)
 {
@@ -63,6 +63,65 @@ void insert_lists(record_node **listt1, record_node **listt2)
 	*listt2=list_unique(*listt2);
 	*listt1=list_mergesort(*listt1);
 	*listt2=list_mergesort(*listt2);
+}
+
+/*------------------------------------------------------DELETELISTS FUNCTION------------------------------------------------------------*/
+
+void delete_lists(record_node **listt1, record_node **listt2)
+{
+	record_node *trvlist1, *trvlist2;
+	int option;
+	char choice='y';
+	while(choice=='y' || choice=='Y')
+   	{
+   		printf("\nSELECT the Record which is to be DELETED\n");
+      		printf("\n1.LIST1\n");
+      		printf("\n2.LIST2\n");
+      		printf("\n!!!!!!!!!!!!!ENTER YOUR CHOICE!!!!!!!!!!!!!!!!\n");
+      		scanf("%d",&option);
+		switch(option)
+	      	{
+	    		case 1:
+			{
+				if(*listt1!=NULL)
+				{
+					trvlist1=*listt1;
+					for(;trvlist1!=NULL;)
+					{
+						trvlist1=trvlist1->next;
+						free(*listt1);
+						*listt1=trvlist1;
+					}
+					printf("Coplete LIST1 deleted successfully!!");
+				}
+				else
+				printf("The list is Already Empty");				
+			}
+			break;
+			case 2:
+			{
+				if(*listt2 != NULL)
+				{
+					trvlist2=*listt2;
+					for(;trvlist2!=NULL;)
+					{
+						trvlist2=trvlist2->next;
+						free(*listt2);
+						*listt2=trvlist2;
+					}
+					printf("Coplete LIST2 deleted successfully!!");
+				}
+				else
+				printf("The list is Already Empty");
+			}
+			break;
+			default:break;
+		}
+		printf("\nDo you want to DELETE another list[y/n]?\n");
+		fflush(stdin);
+		getchar();
+		choice= getchar();	
+	}
 }
 
 /*-----------------------------------------------------GET_STU_REC FUNCTION--------------------------------------------------------------*/
@@ -216,13 +275,11 @@ record_node* delete_node(record_node* sptr)
 
 void print_diff_records(record_node *sptr, record_node *list1, record_node *list2)
 {
-	record_node *tptr;
-	int option;
-	tptr=sptr;
+	int option;record_node  *tptr;
 	char choice='y';
 	while(choice=='y' || choice=='Y')
    	{
-   		printf("\nSELECT the Record which is to be PRINTED\n");
+   		printf("\nSELECT the Record which is to be DELETED\n");
       		printf("\n1.STUDENT RECORD\n");
       		printf("\n2.LIST1\n");
       		printf("\n3.LIST2\n");
@@ -714,68 +771,86 @@ record_node* list_unique(record_node *sptr)
 
 void list_union(record_node **listt1, record_node **listt2, record_node **listt3)
 {
-	record_node *trvlist1, *trvlist2, *toadd, *trvlist3;
-	trvlist1=NULL;
-	trvlist2=NULL;
-	for(trvlist3=*listt1;trvlist3!=NULL;trvlist3=trvlist3->next)
+	record_node *cplist1, *cplist2, *toadd, *trvlist1, *trvlist2;
+	cplist1=NULL;
+	cplist2=NULL;
+	for(trvlist1=*listt1;trvlist1!=NULL;trvlist1=trvlist1->next)
 	{
 		toadd=(record_node*)malloc(sizeof(record_node));
-		toadd->roll_no=trvlist3->roll_no;
-		strcpy(toadd->student_name,trvlist3->student_name);
-		strcpy(toadd->subject_code,trvlist3->subject_code);
-		toadd->marks=trvlist3->marks;	
+		toadd->roll_no=trvlist1->roll_no;
+		strcpy(toadd->student_name,trvlist1->student_name);
+		strcpy(toadd->subject_code,trvlist1->subject_code);
+		toadd->marks=trvlist1->marks;	
 		toadd->next=NULL;
-		if(trvlist1==NULL && toadd!=NULL)
+		if(cplist1==NULL && toadd!=NULL)
 		{
-			trvlist1=toadd;
+			cplist1=toadd;
 		}
-		else if(trvlist1!=NULL && toadd!=NULL)
+		else if(cplist1!=NULL && toadd!=NULL)
 		{
-			toadd->next=trvlist1;
-			trvlist1=toadd;
+			toadd->next=cplist1;
+			cplist1=toadd;
 		}
-	}
-	for(trvlist3=*listt2;trvlist3!=NULL;trvlist3=trvlist3->next)
+	}//creating a copy of list1
+	for(trvlist2=*listt2;trvlist2!=NULL;trvlist2=trvlist2->next)
 	{
 		toadd=(record_node*)malloc(sizeof(record_node));
-		toadd->roll_no=trvlist3->roll_no;
-		strcpy(toadd->student_name,trvlist3->student_name);
-		strcpy(toadd->subject_code,trvlist3->subject_code);
-		toadd->marks=trvlist3->marks;	
+		toadd->roll_no=trvlist2->roll_no;
+		strcpy(toadd->student_name,trvlist2->student_name);
+		strcpy(toadd->subject_code,trvlist2->subject_code);
+		toadd->marks=trvlist2->marks;	
 		toadd->next=NULL;
-		if(trvlist2==NULL && toadd!=NULL)
+		if(cplist2==NULL && toadd!=NULL)
 		{
-			trvlist2=toadd;
+			cplist2=toadd;
 		}
-		else if(trvlist2!=NULL && toadd!=NULL)
+		else if(cplist2!=NULL && toadd!=NULL)
 		{
-			toadd->next=trvlist1;
-			trvlist2=toadd;
+			toadd->next=cplist2;
+			cplist2=toadd;
 		}
-	}
-	if(trvlist1 ==NULL && trvlist2 ==NULL)
+	}//copy of list2
+	//Cheking for various conditiions of both the lists for finding union
+	if(cplist1 ==NULL && cplist2 ==NULL)
 	{
 		*listt3=NULL;
 	}
-	else if(trvlist1 ==NULL && trvlist2 !=NULL)
+	else if(cplist1 ==NULL && cplist2 !=NULL)
 	{
-		*listt3=trvlist2;
-	}
-	else if(trvlist1 !=NULL && trvlist2 ==NULL)
-	{
-		*listt3=trvlist1;
-	}
-	else
-	{
-		trvlist3=trvlist1;
-		while(trvlist3->next!=NULL)
+		*listt3=cplist2;
+		trvlist2=cplist1;
+	  	for(;trvlist2!=NULL;)
 		{
-			trvlist3=trvlist3->next;
-		}
-		trvlist3->next=trvlist2;
+			trvlist2=trvlist2->next;
+			free(cplist1);
+			cplist1=trvlist2;
+	  	}
 	}
+	else if(cplist1 !=NULL && cplist2 ==NULL)
+	{
+		*listt3=cplist1;
+		trvlist2=cplist2;
+	  	for(;trvlist2!=NULL;)
+		{
+			trvlist2=trvlist2->next;
+			free(cplist2);
+			cplist1=trvlist2;
+	  	}
+	}
+	//if any of the list is NULL then liist3 just becomes the list which is not NULL else remains NULL
+	else if(cplist1 !=NULL && cplist2 !=NULL)
+	{
+		trvlist1=cplist1;
+		while(trvlist1->next!=NULL)
+		{
+			trvlist1=trvlist1->next;
+		}
+		trvlist1->next=cplist2;
+		*listt3=cplist1;cplist1=NULL;
+	}//if both are not NULL then the second list is attached to first and then unique operated on it
 	*listt3=list_unique(*listt3);
 	*listt3=list_mergesort(*listt3);
+	//After applying unique and mergesort list is ready
 	printf("The LIST1 is:\n");
 	print_record(*listt1);
 	printf("\n\n\n");
@@ -787,6 +862,21 @@ void list_union(record_node **listt1, record_node **listt2, record_node **listt3
 	print_record(*listt3);
 	else
 	printf("NO LISTS found!!\n");
+	//freeing the created lists in the function
+	trvlist2=*listt3;
+	for(;trvlist2!=NULL;)
+	{
+		trvlist2=trvlist2->next;
+		free(*listt3);
+		*listt3=trvlist2;
+  	}
+  	/*printf("AFTER FREE The CPLIST1 is:\n");
+	print_record(cplist1);
+	printf("The CPLIST2 is:\n");
+	print_record(cplist1);
+	printf("The LIST3 is:\n");
+	print_record(*listt3);*/
+  	*listt3=NULL;
 }
 
 /*---------------------------------------------------LISTUNIONRETURN FUNCTION------------------------------------------------------------*/
@@ -821,19 +911,56 @@ record_node* list_union_return(record_node *listt1, record_node *listt2, record_
 	listt3=list_mergesort(listt3);
 	return listt3;
 }
-/*------------------------------------------------LISTINTERSECTION FUNCTION---------------------------------------------------------------*/
+/*---------------------------------------------------LISTINTERSECTION FUNCTION----------------------------------------------------------*/
 
 void list_intersection(record_node **listt1, record_node **listt2, record_node **listt3)
 {
-	record_node *trvlist1, *trvlist2, *toadd;
-	trvlist1=*listt1;
-	trvlist2=*listt2;
+	record_node *cplist1, *cplist2, *toadd, *trvlist1, *trvlist2;
+	cplist1=NULL;
+	cplist2=NULL;
+	for(trvlist1=*listt1;trvlist1!=NULL;trvlist1=trvlist1->next)
+	{
+		toadd=(record_node*)malloc(sizeof(record_node));
+		toadd->roll_no=trvlist1->roll_no;
+		strcpy(toadd->student_name,trvlist1->student_name);
+		strcpy(toadd->subject_code,trvlist1->subject_code);
+		toadd->marks=trvlist1->marks;	
+		toadd->next=NULL;
+		if(cplist1==NULL && toadd!=NULL)
+		{
+			cplist1=toadd;
+		}
+		else if(cplist1!=NULL && toadd!=NULL)
+		{
+			toadd->next=cplist1;
+			cplist1=toadd;
+		}
+	}//creating a copy of list1
+	for(trvlist2=*listt2;trvlist2!=NULL;trvlist2=trvlist2->next)
+	{
+		toadd=(record_node*)malloc(sizeof(record_node));
+		toadd->roll_no=trvlist2->roll_no;
+		strcpy(toadd->student_name,trvlist2->student_name);
+		strcpy(toadd->subject_code,trvlist2->subject_code);
+		toadd->marks=trvlist2->marks;	
+		toadd->next=NULL;
+		if(cplist2==NULL && toadd!=NULL)
+		{
+			cplist2=toadd;
+		}
+		else if(cplist2!=NULL && toadd!=NULL)
+		{
+			toadd->next=cplist2;
+			cplist2=toadd;
+		}
+	}//creating a copy of list2
 	int flag;
+	trvlist1=cplist1;
 	for(;trvlist1!=NULL;trvlist1=trvlist1->next)
 	{
 		toadd=NULL;flag=0;
-		for(trvlist2=*listt2;trvlist2!=NULL && flag==0;trvlist2=trvlist2->next)
-		{
+		for(trvlist2=cplist2;trvlist2!=NULL && flag==0;trvlist2=trvlist2->next)
+		{//checking whether the element in list1 is equal to element in list2 on basis of rollno and sub_code
 			if(trvlist2->roll_no ==trvlist1->roll_no && strcmp(trvlist2->subject_code,trvlist1->subject_code)==0)
 			{
 				toadd=(record_node*)malloc(sizeof(record_node));
@@ -843,6 +970,7 @@ void list_intersection(record_node **listt1, record_node **listt2, record_node *
 				toadd->marks=trvlist1->marks;	
 				toadd->next=NULL;flag=1;
 			}
+			//saving the common elements into toadd node
 			if(*listt3==NULL && toadd!=NULL)
 			{
 				*listt3=toadd;
@@ -851,10 +979,10 @@ void list_intersection(record_node **listt1, record_node **listt2, record_node *
 			{
 				toadd->next=*listt3;
 				*listt3=toadd;
-			}
+			}//adding the toadd node to list3
 		}
 	}
-	*listt3=list_unique(*listt3);
+	*listt3=list_unique(*listt3);//operating unique on list3
 	printf("The LIST1 is:\n");
 	print_record(*listt1);
 	printf("\n\n\n");
@@ -867,7 +995,28 @@ void list_intersection(record_node **listt1, record_node **listt2, record_node *
 	print_record(*listt3);
 	else
 	printf("NO common elements found!!\n");
-	free(*listt3);
+	//freeing the created lists in the given function
+	trvlist2=*listt3;
+	for(;trvlist2!=NULL;)
+	{
+		trvlist2=trvlist2->next;
+		free(*listt3);
+		*listt3=trvlist2;
+  	}
+  	trvlist1=cplist1;
+  	for(;trvlist1!=NULL;)
+	{
+		trvlist1=trvlist1->next;
+		free(cplist1);
+		cplist1=trvlist1;
+  	}
+  	trvlist2=cplist2;
+  	for(;trvlist2!=NULL;)
+	{
+		trvlist2=trvlist2->next;
+		free(cplist2);
+		cplist2=trvlist2;
+  	}
 	*listt3=NULL;
 }
 
@@ -875,20 +1024,58 @@ void list_intersection(record_node **listt1, record_node **listt2, record_node *
 
 void list_difference(record_node **listt1, record_node **listt2, record_node **listt3)
 {
-	record_node *trvlist1, *trvlist2, *toadd;
-	trvlist1=*listt1;
-	trvlist2=*listt2;
+	record_node *cplist1, *cplist2, *toadd, *trvlist1, *trvlist2;
+	cplist1=NULL;
+	cplist2=NULL;
+	for(trvlist1=*listt1;trvlist1!=NULL;trvlist1=trvlist1->next)
+	{
+		toadd=(record_node*)malloc(sizeof(record_node));
+		toadd->roll_no=trvlist1->roll_no;
+		strcpy(toadd->student_name,trvlist1->student_name);
+		strcpy(toadd->subject_code,trvlist1->subject_code);
+		toadd->marks=trvlist1->marks;	
+		toadd->next=NULL;
+		if(cplist1==NULL && toadd!=NULL)
+		{
+			cplist1=toadd;
+		}
+		else if(cplist1!=NULL && toadd!=NULL)
+		{
+			toadd->next=cplist1;
+			cplist1=toadd;
+		}
+	}//creating copy of list1
+	for(trvlist2=*listt2;trvlist2!=NULL;trvlist2=trvlist2->next)
+	{
+		toadd=(record_node*)malloc(sizeof(record_node));
+		toadd->roll_no=trvlist2->roll_no;
+		strcpy(toadd->student_name,trvlist2->student_name);
+		strcpy(toadd->subject_code,trvlist2->subject_code);
+		toadd->marks=trvlist2->marks;	
+		toadd->next=NULL;
+		if(cplist2==NULL && toadd!=NULL)
+		{
+			cplist2=toadd;
+		}
+		else if(cplist2!=NULL && toadd!=NULL)
+		{
+			toadd->next=cplist2;
+			cplist2=toadd;
+		}
+	}//creating copy of list2
 	int found;
+	trvlist1=cplist1;
 	for(;trvlist1!=NULL;trvlist1=trvlist1->next)
 	{
 		toadd=NULL;found=0;
-		for(trvlist2=*listt2;trvlist2!=NULL && found==0;trvlist2=trvlist2->next)
+		for(trvlist2=cplist2;trvlist2!=NULL && found==0;trvlist2=trvlist2->next)
 		{
 			if(trvlist2->roll_no ==trvlist1->roll_no && strcmp(trvlist2->subject_code,trvlist1->subject_code)==0)
 			{
 				found=1;
 			}
-		}
+		}//checking if element in list1 is whether present in list 2
+		//if found ignore else add it to the list3 thus adding uncommon or subtracted elements to llist3
 		if(found==0)
 		{
 			toadd=(record_node*)malloc(sizeof(record_node));
@@ -908,7 +1095,7 @@ void list_difference(record_node **listt1, record_node **listt2, record_node **l
 				*listt3=toadd;
 		}
 	}
-	*listt3=list_unique(*listt3);
+	*listt3=list_unique(*listt3);//operating unique on list3
 	printf("The LIST1 is:\n");
 	print_record(*listt1);
 	printf("\n\n\n");
@@ -921,7 +1108,22 @@ void list_difference(record_node **listt1, record_node **listt2, record_node **l
 	print_record(*listt3);
 	else
 	printf("NO LISTS found!!\n");
-	free(*listt3);
+	//freeing the lists which were created in this function
+	for(trvlist2=*listt3;trvlist2!=NULL;trvlist2=trvlist2->next)
+	{
+		*listt3=(*listt3)->next;
+  		free(trvlist2);
+  	}
+  	for(trvlist2=cplist1;trvlist2!=NULL;trvlist2=trvlist2->next)
+	{
+		cplist1=(cplist1)->next;
+  		free(trvlist2);
+  	}
+  	for(trvlist2=cplist2;trvlist2!=NULL;trvlist2=trvlist2->next)
+	{
+		cplist2=(cplist2)->next;
+  		free(trvlist2);
+  	}
 	*listt3=NULL;
 }
 
@@ -972,15 +1174,52 @@ record_node * list_difference_return(record_node* listt1, record_node* listt2, r
 
 void list_symmetric_difference(record_node **listt1, record_node **listt2,record_node **listt3)
 {
-	//printf("HI I AM HERE\n");
-	record_node *list4=NULL,*list7=NULL;
-	list4=list_difference_return(*listt1,*listt2,list4);
+	record_node *cplist1, *cplist2, *toadd, *trvlist1, *trvlist2, *listdiff12=NULL, *listdiff21=NULL;
+	cplist1=NULL;
+	cplist2=NULL;
+	for(trvlist1=*listt1;trvlist1!=NULL;trvlist1=trvlist1->next)
+	{
+		toadd=(record_node*)malloc(sizeof(record_node));
+		toadd->roll_no=trvlist1->roll_no;
+		strcpy(toadd->student_name,trvlist1->student_name);
+		strcpy(toadd->subject_code,trvlist1->subject_code);
+		toadd->marks=trvlist1->marks;	
+		toadd->next=NULL;
+		if(cplist1==NULL && toadd!=NULL)
+		{
+			cplist1=toadd;
+		}
+		else if(cplist1!=NULL && toadd!=NULL)
+		{
+			toadd->next=cplist1;
+			cplist1=toadd;
+		}
+	}//creating copy of list1
+	for(trvlist2=*listt2;trvlist2!=NULL;trvlist2=trvlist2->next)
+	{
+		toadd=(record_node*)malloc(sizeof(record_node));
+		toadd->roll_no=trvlist2->roll_no;
+		strcpy(toadd->student_name,trvlist2->student_name);
+		strcpy(toadd->subject_code,trvlist2->subject_code);
+		toadd->marks=trvlist2->marks;	
+		toadd->next=NULL;
+		if(cplist2==NULL && toadd!=NULL)
+		{
+			cplist2=toadd;
+		}
+		else if(cplist2!=NULL && toadd!=NULL)
+		{
+			toadd->next=cplist2;
+			cplist2=toadd;
+		}
+	}//creating copy of list2
+	listdiff12=list_difference_return(cplist1,cplist2,listdiff12);//difference of l1 and l2
 	//printf("HI I AM HERE LIST4:\n");
-	//print_record(list4);
-	list7=list_difference_return(*listt2,*listt1,list7);
+	//print_record(listdiff12);
+	listdiff21=list_difference_return(cplist2,cplist1,listdiff21);//difference of l2 and l1
 	//printf("HI I AM HERE LIST7:\n");
-	//print_record(list7);
-	*listt3=list_union_return(list4,list7,*listt3);
+	//print_record(listdiff21);
+	*listt3=list_union_return(listdiff12,listdiff21,*listt3);//union of two differences
 	*listt3=list_mergesort(*listt3);
 	printf("The LIST1 is:\n");
 	print_record(*listt1);
@@ -993,7 +1232,27 @@ void list_symmetric_difference(record_node **listt1, record_node **listt2,record
 	print_record(*listt3);
 	else
 	printf("NO LISTS found!!\n");
-	free(*listt3);
+	trvlist2=*listt3;
+	for(;trvlist2!=NULL;)
+	{
+		trvlist2=trvlist2->next;
+		free(*listt3);
+		*listt3=trvlist2;
+  	}
+  	trvlist1=cplist1;
+  	for(;trvlist1!=NULL;)
+	{
+		trvlist1=trvlist1->next;
+		free(cplist1);
+		cplist1=trvlist1;
+  	}
+  	trvlist2=cplist2;
+  	for(;trvlist2!=NULL;)
+	{
+		trvlist2=trvlist2->next;
+		free(cplist2);
+		cplist2=trvlist2;
+  	}
 	*listt3=NULL;
 }
 

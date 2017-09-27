@@ -1,4 +1,4 @@
-#include "head.h"
+#include "decls.c"
 
 /*-----------------------------------------------Main function starts here--------------------------------------------------------------*/
 int main()
@@ -22,13 +22,14 @@ int main()
       		printf("\n8.FIND TOPPER\n");
       		printf("\n9.FIND Kth POPULAR SUBJECT\n");
       		printf("\n10.FIND FAILURES\n");
-      		printf("\n11.INSERT LISTS FOR  LIST FUNCTIONS\n");
-      		printf("\n12.LIST UNIQUE\n");
-      		printf("\n13.LIST UNION\n");
-      		printf("\n14.LIST INTERSECTION\n");
-      		printf("\n15.LIST DIFFERENCE\n");
-      		printf("\n16.LIST SYMMETRIC DIFFERENCE\n");
-      		printf("\n17.PRINT THE LIST\n\n");
+      		printf("\n11.LIST UNIQUE\n");      		
+      		printf("\n12.INSERT LISTS FOR  LIST FUNCTIONS\n");
+      		printf("\n13.DELETE LISTS FOR  LIST FUNCTIONS\n");
+      		printf("\n14.LIST UNION\n");
+      		printf("\n15.LIST INTERSECTION\n");
+      		printf("\n16.LIST DIFFERENCE\n");
+      		printf("\n17.LIST SYMMETRIC DIFFERENCE\n");
+      		printf("\n18.PRINT THE LISTS\n\n");
       		printf("\n!!!!!!!!!!!!!ENTER YOUR CHOICE!!!!!!!!!!!!!!!!\n");
       		scanf("%d",&option);
 		switch(option)
@@ -74,28 +75,34 @@ int main()
          		break;
          		
          		case 11:
-         		insert_lists(&list1,&list2);
-         		break;
-	      		case 12:
          		lptr=list_unique(lptr);
              		break;
          		
-            		case 13:
+         		case 12:
+         		insert_lists(&list1,&list2);
+         		break;
+         		
+         		case 13:
+         		delete_lists(&list1,&list2);
+         		break;         		
+         		
+            		case 14:
          		list_union(&list1,&list2,&list3);
          		break;
          		
-         		case 14:
+         		case 15:
          		list_intersection(&list1, &list2, &list3);
          		break;
          		
-        		case 15:
+        		case 16:
          		list_difference(&list1, &list2, &list3);
          		break;
          		
-         		case 16:
+         		case 17:
          		list_symmetric_difference(&list1,&list2,&list3);
          		break;
-         		case 17:
+         		
+         		case 18:
          		print_diff_records(lptr,list1,list2);
          		break;
          		default:break;
