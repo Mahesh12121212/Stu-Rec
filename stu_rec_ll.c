@@ -39,11 +39,11 @@ int main()
         		break;
     			case 2:
         		lptr=insert(lptr);
-        		list_mergesort(lptr);
+        		lptr=list_mergesort(lptr);
          		break;
          		case 3:
          		lptr=delete_node(lptr);
-         		list_mergesort(lptr);
+         		lptr=list_mergesort(lptr);
          		break;
          		
          		case 4:

@@ -154,6 +154,22 @@ void insert_stu_rec(record_node **sptr)
 
 
 
+/*-----------------------------------------------PRINT_RECORD FUNCTION------------------------------------------------------------------*/
+
+void print_record(record_node *sptr)
+{
+	record_node *tptr;
+	tptr=sptr;
+	while(tptr!=NULL)//printing the record
+	{
+		printf("\n----ROLL NO----\t----NAME----\t----SUBJECT----\t----MARKS----\n\n");
+		printf("      %d               %s            %s               %d       \n",tptr->roll_no,tptr->student_name,tptr->subject_code,tptr->marks);
+		tptr=tptr->next;
+	}
+}
+
+
+
 /*-----------------------------------------------CREATE AND INSERT NODE FUNCTION--------------------------------------------------------*/
 
 record_node* create_node(int rn, char* stu_name, char* sub_code, int marks)
@@ -227,6 +243,8 @@ record_node* insert(record_node* sptr)
 		tptr->marks=marks;
 		printf("\nRecord updated successfully\n");
 	}
+	/*printf("SPTR:\n\n");
+	print_record(sptr);*/
 	return sptr;
 }
 
@@ -279,7 +297,7 @@ void print_diff_records(record_node *sptr, record_node *list1, record_node *list
 	char choice='y';
 	while(choice=='y' || choice=='Y')
    	{
-   		printf("\nSELECT the Record which is to be DELETED\n");
+   		printf("\nSELECT the Record which is to be PRINTED\n");
       		printf("\n1.STUDENT RECORD\n");
       		printf("\n2.LIST1\n");
       		printf("\n3.LIST2\n");
@@ -356,21 +374,6 @@ void print_diff_records(record_node *sptr, record_node *list1, record_node *list
 	}
 }
 
-
-
-/*-----------------------------------------------PRINT_RECORD FUNCTION------------------------------------------------------------------*/
-
-void print_record(record_node *sptr)
-{
-	record_node *tptr;
-	tptr=sptr;
-	while(tptr!=NULL)//printing the record
-	{
-		printf("\n----ROLL NO----\t----NAME----\t----SUBJECT----\t----MARKS----\n\n");
-		printf("      %d               %s            %s               %d       \n",tptr->roll_no,tptr->student_name,tptr->subject_code,tptr->marks);
-		tptr=tptr->next;
-	}
-}
 
 
 /*-----------------------------------------------GETNUMRECORDS FUNCTION-----------------------------------------------------------------*/
@@ -531,7 +534,7 @@ pop_sub* mergeself_popsub(pop_sub *lptr,pop_sub *ptr)
 	}
 	else
 	{
-		if(p->avg_marks <q->avg_marks)
+		if(p->avg_marks >q->avg_marks)
 		{
 			head=p;
 			p=p->next;
@@ -544,7 +547,7 @@ pop_sub* mergeself_popsub(pop_sub *lptr,pop_sub *ptr)
 		r=head;
 		while((p!=NULL) && (q!=NULL))
 		{
-			if(p->avg_marks < q->avg_marks)
+			if(p->avg_marks > q->avg_marks)
 			{
 				r->next=p;
 				p=p->next;
@@ -644,14 +647,15 @@ void find_kth_popular_subject(record_node* sptr)
 			}
 		}
 	}
-	nptr=list_mergesort_popsub(nptr);
-	/*while(crptr!=NULL)
+	while(crptr!=NULL)
 	{
 	printf("Subject code is:     %s     Avg Marks are     %d\n",crptr->subject_code,crptr->avg_marks);crptr=crptr->next;}
+	nptr=list_mergesort_popsub(nptr);
+	
 	crptr=nptr;printf("AFTER MERGESORT\n\n");
 	while(crptr!=NULL)
 	{
-	printf("Subject code is:     %s     Avg Marks are     %d\n",crptr->subject_code,crptr->avg_marks);crptr=crptr->next;}*/
+	printf("Subject code is:     %s     Avg Marks are     %d\n",crptr->subject_code,crptr->avg_marks);crptr=crptr->next;}
 	crptr=nptr;printf("\n\n");
 	pop_sub *trvptr=nptr;int countnn=0;
 	while(trvptr!=NULL)
