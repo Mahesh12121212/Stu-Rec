@@ -18,7 +18,7 @@ int main()
      		printf("\n4.GET NUMBER OF RECORDS\n");
       		printf("\n5.IS RECORD EMPTY?\n");
       		printf("\n6.IS RECORD FULL?\n");
-      		printf("\n7.GET MAX MARKS IN PARTICULAR SUBJECT\n");
+      		printf("\n7.GET  IN PARTICULAR SUBJECT\n");
       		printf("\n8.FIND TOPPER\n");
       		printf("\n9.FIND Kth POPULAR SUBJECT\n");
       		printf("\n10.FIND FAILURES\n");
